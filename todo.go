@@ -8,12 +8,19 @@ import (
 type Todo struct {
 	text string
 	id   int
+	done bool
 }
 
 type TodoRepo []Todo
 
 func RenderTodos(tr TodoRepo) {
-	fmt.Println(tr)
+	for _, todo := range tr {
+		done := ""	
+		if todo.done {
+			done = "\u2713"			
+		}
+		fmt.Println(todo.id, todo.text, done)
+	}
 }
 
 func AppendTodo(tr TodoRepo, todo Todo) (TodoRepo, int) {
@@ -21,13 +28,24 @@ func AppendTodo(tr TodoRepo, todo Todo) (TodoRepo, int) {
 	return tr, todo.id + 1
 }
 
-func EditTodoByID(tr TodoRepo, todoID int, updatedText string) (error, TodoRepo, Todo) {
+func EditTodoText(tr TodoRepo, todoID int, updatedText string) (error, TodoRepo, Todo) {
 	err, index := findIndex(tr, todoID)
 	if err != nil {
 		return err, tr, Todo{}
 	}
 
 	tr[index].text = updatedText
+
+	return nil, tr, tr[index]
+}
+
+func ToggleDone(tr TodoRepo, todoID int) (error, TodoRepo, Todo) {
+	err, index := findIndex(tr, todoID)
+	if err != nil {
+		return err, tr, Todo{}
+	}
+
+	tr[index].done = !tr[index].done
 
 	return nil, tr, tr[index]
 }

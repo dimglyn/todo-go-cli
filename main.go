@@ -30,11 +30,15 @@ func execute(repo TodoRepo, query string) TodoRepo {
 	case "show":
 		RenderTodos(repo)
 	case "add":
-		repo, _ = addTodo(repo, args)
+		repo, _ = newTodo(repo, args)
 	case "edit":
 		idString, updatedText := parseInput(args)
 		if id, err := strconv.ParseInt(idString, 10, 32); err == nil {
 			repo, _ = updateTodo(repo, int(id), updatedText)
+		}
+	case "toggle":
+		if index, err := strconv.ParseInt(args, 10, 32); err == nil {
+			repo = toggleDone(repo, int(index))
 		}
 	case "remove":
 		if removeIndex, err := strconv.ParseInt(args, 10, 32); err == nil {
@@ -57,11 +61,12 @@ func parseInput(text string) (command string, args string) {
 	return
 }
 
-func addTodo(repo TodoRepo, args string) (TodoRepo, int) {
+func newTodo(repo TodoRepo, args string) (TodoRepo, int) {
 	i := len(repo)
 	todo := Todo{
 		text: args,
 		id:   i,
+		done: false,
 	}
 
 	fmt.Println("Success added todo with id: ", todo.id)
@@ -79,11 +84,21 @@ func deleteTodo(repo TodoRepo, index int) TodoRepo {
 }
 
 func updateTodo(repo TodoRepo, id int, updatedText string) (TodoRepo, Todo) {
-	err, repo, updatedTodo := EditTodoByID(repo, id, updatedText)
+	err, repo, updatedTodo := EditTodoText(repo, id, updatedText)
 	if err != nil {
 		fmt.Println("Error: ", err)
 	} else {
 		fmt.Println("updated todo ", updatedTodo)
 	}
 	return repo, updatedTodo
+}
+
+func toggleDone(repo TodoRepo, index int) TodoRepo {
+	err, repo, _ := ToggleDone(repo, index)
+	if err != nil {
+		fmt.Println("Error: ", err)
+	} else {
+		fmt.Println("Marked as done!")
+	}
+	return repo
 }
