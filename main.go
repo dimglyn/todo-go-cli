@@ -30,11 +30,8 @@ func main() {
 			renderTodos(repo)
 		}
 		
-		inputArray := strings.Split(text, " ")
-		command := inputArray[0]
-		
-		args := strings.Join(inputArray[1:], " ")
-		
+		args, command := parseInput(text)
+
 		todo := Todo {
 			text: args, 
 			id: i,
@@ -59,4 +56,11 @@ func appendTodo (tr TodoRepo, todo Todo) (TodoRepo, int) {
 
 func renderTodos (tr TodoRepo) {
 	fmt.Println(tr)
+}
+
+func parseInput (text string) (args string, command string) {
+	inputArray := strings.Split(text, " ")
+	command = inputArray[0]
+	args = strings.Join(inputArray[1:], " ")
+	return
 }
