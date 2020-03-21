@@ -10,27 +10,26 @@ import (
 
 func main() {
 	repo := TodoRepo{}
-	i := 0
 	scanner := bufio.NewScanner(os.Stdin)
 
 	fmt.Print("Tell me what to do: ")
 
 	for scanner.Scan() {
 		text := scanner.Text()
-		repo = execute(repo, text, i)
+		repo = execute(repo, text)
 		fmt.Print("Tell me what to do: ")
 	}
 	fmt.Println(repo)
 }
 
-func execute(repo TodoRepo, query string, i int) TodoRepo {
+func execute(repo TodoRepo, query string) TodoRepo {
 	command, args := parseInput(query)
 
 	switch command {
 	case "show":
 		RenderTodos(repo)
 	case "add":
-		repo, i = addTodo(repo, i, args)
+		repo, _ = addTodo(repo, args)
 	case "edit":
 		idString, updatedText := parseInput(args)
 		if id, err := strconv.ParseInt(idString, 10, 32); err == nil {
@@ -57,7 +56,8 @@ func parseInput(text string) (command string, args string) {
 	return
 }
 
-func addTodo(repo TodoRepo, i int, args string) (TodoRepo, int) {
+func addTodo(repo TodoRepo, args string) (TodoRepo, int) {
+	i := len(repo)
 	todo := Todo{
 		text: args,
 		id:   i,
