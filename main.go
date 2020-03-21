@@ -5,14 +5,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
-	
 )
-		type Todo struct {
-	text string
-	id int
-}
-
-type TodoRepo []Todo
 
 func main() {
 	repo := TodoRepo{}
@@ -26,8 +19,8 @@ func main() {
 		if text == "quit" {
 			break
 		}
-		if(text == "show") {
-			renderTodos(repo)
+		if text == "show" {
+			RenderTodos(repo)
 		}
 		
 		args, command := parseInput(text)
@@ -37,25 +30,15 @@ func main() {
 			id: i,
 		}
 		
-		if command == "add"{
-			repo, i = appendTodo(repo, todo)
+		if command == "add" {
+			repo, i = AppendTodo(repo, todo)
 			fmt.Println("Success added todo with id: ", todo.id)
 		}
 		
 		
 		fmt.Print("Tell me what to do: ")
-		
 	}
 	fmt.Println(repo)
-}
-
-func appendTodo (tr TodoRepo, todo Todo) (TodoRepo, int) {
-	tr = append(tr, todo)
-	return tr, todo.id + 1
-}
-
-func renderTodos (tr TodoRepo) {
-	fmt.Println(tr)
 }
 
 func parseInput (text string) (args string, command string) {
