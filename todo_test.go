@@ -47,3 +47,17 @@ func TestEditTodo(t *testing.T) {
 		t.Error("Should update a todo by its id")
 	}
 }
+
+func TestRemoveTodo(t *testing.T) {
+	repo := TodoRepo{
+		Todo{
+			text: "removable todo",
+			id:   4,
+		},
+	}
+	_, repo = RemoveTodo(repo, 4)
+
+	if len(repo) != 0 {
+		t.Error("Should remove a todo by it's id")
+	}
+}

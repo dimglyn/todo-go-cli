@@ -32,11 +32,23 @@ func EditTodoByID(tr TodoRepo, todoID int, updatedText string) (error, TodoRepo,
 	return nil, tr, tr[index]
 }
 
+func RemoveTodo(tr TodoRepo, todoID int) (error, TodoRepo) {
+	err, selectedIndexID := findIndex(tr, todoID)
+	if err != nil {
+		return err, tr
+	}
+
+	tr = append(tr[:selectedIndexID], tr[selectedIndexID+1:]...)
+
+	return nil, tr
+}
+
 func findIndex(tr TodoRepo, todoID int) (error, int) {
 	for i, t := range tr {
 		if t.id == todoID {
 			return nil, i
 		}
 	}
+
 	return errors.New(fmt.Sprint("Did not find todo with id: ", todoID)), -1
 }
