@@ -24,6 +24,7 @@ func main() {
 
 func execute(repo TodoRepo, query string) TodoRepo {
 	command, args := parseInput(query)
+	command = strings.ToLower(command)
 
 	switch command {
 	case "show":
