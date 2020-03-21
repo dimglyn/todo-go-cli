@@ -30,7 +30,7 @@ func execute(repo TodoRepo, query string) TodoRepo {
 	case "show":
 		RenderTodos(repo)
 	case "add":
-		repo, _ = addTodo(repo, args)
+		repo, _ = newTodo(repo, args)
 	case "edit":
 		idString, updatedText := parseInput(args)
 		if id, err := strconv.ParseInt(idString, 10, 32); err == nil {
@@ -57,11 +57,12 @@ func parseInput(text string) (command string, args string) {
 	return
 }
 
-func addTodo(repo TodoRepo, args string) (TodoRepo, int) {
+func newTodo(repo TodoRepo, args string) (TodoRepo, int) {
 	i := len(repo)
 	todo := Todo{
 		text: args,
 		id:   i,
+		done: false,
 	}
 
 	fmt.Println("Success added todo with id: ", todo.id)
