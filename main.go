@@ -4,9 +4,10 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strings"
+	
 )
-
-type Todo struct {
+		type Todo struct {
 	text string
 	id int
 }
@@ -14,30 +15,48 @@ type Todo struct {
 type TodoRepo []Todo
 
 func main() {
-	todos := TodoRepo{}
+	repo := TodoRepo{}
 	i := 0
 	scanner := bufio.NewScanner(os.Stdin)
+	fmt.Print("Tell me what to do: ")
 	for scanner.Scan() {
-		fmt.Print("Tell me what to do: ")
-    text := scanner.Text()
-
-		if text == "skase" {
+	
+		text := scanner.Text()
+		
+		if text == "quit" {
 			break
 		}
-
+		if(text == "show") {
+			renderTodos(repo)
+		}
+		
+		inputArray := strings.Split(text, " ")
+		command := inputArray[0]
+		
+		args := strings.Join(inputArray[1:], " ")
+		
 		todo := Todo {
-			text: text,
+			text: args, 
 			id: i,
 		}
-
-		todos = addTodo(todos, todo)
-
-		i++
+		
+		if command == "add"{
+			repo, i = appendTodo(repo, todo)
+			fmt.Println("Success added todo with id: ", todo.id)
+		}
+		
+		
+		fmt.Print("Tell me what to do: ")
+		
 	}
-	fmt.Println(todos)
+	fmt.Println(repo)
 }
 
-func addTodo (tr TodoRepo, todo Todo) TodoRepo {
+func appendTodo (tr TodoRepo, todo Todo) (TodoRepo, int) {
 	tr = append(tr, todo)
-	return tr
+	return tr, todo.id + 1
+}
+
+func renderTodos (tr TodoRepo) {
+	fmt.Println(tr)
 }
