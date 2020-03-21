@@ -14,7 +14,13 @@ type Todo struct {
 type TodoRepo []Todo
 
 func RenderTodos(tr TodoRepo) {
-	fmt.Println(tr)
+	for _, todo := range tr {
+		done := ""	
+		if todo.done {
+			done = "\u2713"			
+		}
+		fmt.Println(todo.id, todo.text, done)
+	}
 }
 
 func AppendTodo(tr TodoRepo, todo Todo) (TodoRepo, int) {

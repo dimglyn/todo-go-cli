@@ -61,3 +61,19 @@ func TestRemoveTodo(t *testing.T) {
 		t.Error("Should remove a todo by it's id")
 	}
 }
+
+func TestToggleDone(t *testing.T) {
+	repo := TodoRepo{
+		Todo{
+			text: "removable todo",
+			id:   4,
+			done: false,
+		},
+	}
+	_, repo, todo := ToggleDone(repo, 4)
+
+	if !todo.done {
+		t.Error("Should be true (done)")
+	}
+
+}
