@@ -36,6 +36,10 @@ func execute(repo TodoRepo, query string) TodoRepo {
 		if id, err := strconv.ParseInt(idString, 10, 32); err == nil {
 			repo, _ = updateTodo(repo, int(id), updatedText)
 		}
+	case "toggle":
+		if index, err := strconv.ParseInt(args, 10, 32); err == nil {
+			repo = toggleDone(repo, int(index))
+		}
 	case "remove":
 		if removeIndex, err := strconv.ParseInt(args, 10, 32); err == nil {
 			repo = deleteTodo(repo, int(removeIndex))
@@ -80,11 +84,21 @@ func deleteTodo(repo TodoRepo, index int) TodoRepo {
 }
 
 func updateTodo(repo TodoRepo, id int, updatedText string) (TodoRepo, Todo) {
-	err, repo, updatedTodo := EditTodoByID(repo, id, updatedText)
+	err, repo, updatedTodo := EditTodoText(repo, id, updatedText)
 	if err != nil {
 		fmt.Println("Error: ", err)
 	} else {
 		fmt.Println("updated todo ", updatedTodo)
 	}
 	return repo, updatedTodo
+}
+
+func toggleDone(repo TodoRepo, index int) TodoRepo {
+	err, repo, _ := ToggleDone(repo, index)
+	if err != nil {
+		fmt.Println("Error: ", err)
+	} else {
+		fmt.Println("Marked as done!")
+	}
+	return repo
 }

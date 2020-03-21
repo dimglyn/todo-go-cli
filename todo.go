@@ -28,7 +28,7 @@ func AppendTodo(tr TodoRepo, todo Todo) (TodoRepo, int) {
 	return tr, todo.id + 1
 }
 
-func EditTodoByID(tr TodoRepo, todoID int, updatedText string) (error, TodoRepo, Todo) {
+func EditTodoText(tr TodoRepo, todoID int, updatedText string) (error, TodoRepo, Todo) {
 	err, index := findIndex(tr, todoID)
 	if err != nil {
 		return err, tr, Todo{}

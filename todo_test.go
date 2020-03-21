@@ -41,7 +41,7 @@ func TestEditTodo(t *testing.T) {
 	repo := TodoRepo{todo}
 	newText := "new todo"
 
-	_, repo, updatedTodo := EditTodoByID(repo, todo.id, newText)
+	_, repo, updatedTodo := EditTodoText(repo, todo.id, newText)
 
 	if updatedTodo.text != newText {
 		t.Error("Should update a todo by its id")
