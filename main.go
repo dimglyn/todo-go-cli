@@ -55,7 +55,7 @@ func main() {
 			if id, err := strconv.ParseInt(idString, 10, 32); err == nil {
 				err, repo, updatedTodo = EditTodoByID(repo, int(id), updatedText)
 				if err != nil {
-					fmt.Print("Error: ", err)
+					fmt.Println("Error: ", err)
 				}
 				fmt.Println("updated todo ", updatedTodo)
 			}
