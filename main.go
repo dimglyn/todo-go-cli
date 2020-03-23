@@ -8,18 +8,27 @@ import (
 	"strings"
 )
 
-func main() {
-	repo := TodoRepo{}
-	scanner := bufio.NewScanner(os.Stdin)
+var todoRepo TodoRepo
+var scanner *bufio.Scanner
 
+func init() {
+	todoRepo = TodoRepo{}
+	scanner = bufio.NewScanner(os.Stdin)
+}
+
+func main() {
 	fmt.Print("Tell me what to do: ")
 
 	for scanner.Scan() {
 		text := scanner.Text()
-		repo = execute(repo, text)
+		if text == "quit" || text == "exit" {
+			fmt.Println("Bye bye")
+			break
+		}
+		todoRepo = execute(todoRepo, text)
 		fmt.Print("Tell me what to do: ")
 	}
-	fmt.Println(repo)
+	fmt.Println(todoRepo)
 }
 
 func execute(repo TodoRepo, query string) TodoRepo {
@@ -27,26 +36,23 @@ func execute(repo TodoRepo, query string) TodoRepo {
 	command = strings.ToLower(command)
 
 	switch command {
-	case "show":
-		RenderTodos(repo)
-	case "add":
+	case "show", "view":
+		fmt.Println(repo)
+	case "add", "new", "create":
 		repo, _ = newTodo(repo, args)
-	case "edit":
+	case "edit", "update":
 		idString, updatedText := parseInput(args)
 		if id, err := strconv.ParseInt(idString, 10, 32); err == nil {
 			repo, _ = updateTodo(repo, int(id), updatedText)
 		}
-	case "toggle":
+	case "toggle", "done":
 		if index, err := strconv.ParseInt(args, 10, 32); err == nil {
 			repo = toggleDone(repo, int(index))
 		}
-	case "remove":
+	case "remove", "delete", "rm":
 		if removeIndex, err := strconv.ParseInt(args, 10, 32); err == nil {
 			repo = deleteTodo(repo, int(removeIndex))
 		}
-	case "quit":
-		fmt.Println("Bye bye")
-		break
 	default:
 		fmt.Println("Sorry cant do that")
 	}

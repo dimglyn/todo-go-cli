@@ -13,14 +13,15 @@ type Todo struct {
 
 type TodoRepo []Todo
 
-func RenderTodos(tr TodoRepo) {
+func (tr TodoRepo) String() (todos string) {
 	for _, todo := range tr {
-		done := ""	
+		done := ""
 		if todo.done {
-			done = "\u2713"			
+			done = "\u2713"
 		}
-		fmt.Println(todo.id, todo.text, done)
+		todos += fmt.Sprintf("%v - %v %v\n", todo.id, todo.text, done)
 	}
+	return todos
 }
 
 func AppendTodo(tr TodoRepo, todo Todo) (TodoRepo, int) {
