@@ -25,33 +25,38 @@ func main() {
 			fmt.Println("Bye bye")
 			break
 		}
-		todoRepo = execute(todoRepo, text)
+		query := parseInput(text)
+		query.command = strings.ToLower(query.command)
+		todoRepo = execute(todoRepo, query)
 		fmt.Print("Tell me what to do: ")
 	}
 	fmt.Println(todoRepo)
 }
 
-func execute(repo TodoRepo, query string) TodoRepo {
-	command, args := parseInput(query)
-	command = strings.ToLower(command)
+func execute(repo TodoRepo, query Query) TodoRepo {
 
-	switch command {
+	switch query.command {
 	case "show", "view":
 		fmt.Println(repo)
+		break
 	case "add", "new", "create":
-		repo, _ = newTodo(repo, args)
+		repo, _ = newTodo(repo, query.args)
+		break
 	case "edit", "update":
-		idString, updatedText := parseInput(args)
-		if id, err := strconv.ParseInt(idString, 10, 32); err == nil {
-			repo, _ = updateTodo(repo, int(id), updatedText)
+		query := parseInput(query.args)
+		if id, err := strconv.ParseInt(query.command, 10, 32); err == nil {
+			repo, _ = updateTodo(repo, int(id), query.args)
+			break
 		}
 	case "toggle", "done":
-		if index, err := strconv.ParseInt(args, 10, 32); err == nil {
+		if index, err := strconv.ParseInt(query.args, 10, 32); err == nil {
 			repo = toggleDone(repo, int(index))
+			break
 		}
 	case "remove", "delete", "rm":
-		if removeIndex, err := strconv.ParseInt(args, 10, 32); err == nil {
+		if removeIndex, err := strconv.ParseInt(query.args, 10, 32); err == nil {
 			repo = deleteTodo(repo, int(removeIndex))
+			break
 		}
 	default:
 		fmt.Println("Sorry cant do that")

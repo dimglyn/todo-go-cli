@@ -2,15 +2,7 @@ package main
 
 import (
 	"fmt"
-	"strings"
 )
-
-func parseInput(text string) (command string, args string) {
-	inputArray := strings.Split(text, " ")
-	command = inputArray[0]
-	args = strings.Join(inputArray[1:], " ")
-	return
-}
 
 func newTodo(repo TodoRepo, args string) (TodoRepo, int) {
 	i := len(repo)
