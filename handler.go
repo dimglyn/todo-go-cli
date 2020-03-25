@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-func executeQuery(repo TodoRepo, query Query) TodoRepo {
+func handle(repo TodoRepo, query Query) TodoRepo {
 	switch query.command {
 	case 1:
 		fmt.Println(repo)

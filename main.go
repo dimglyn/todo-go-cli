@@ -30,7 +30,7 @@ func main() {
 			fmt.Print("Tell me what to do: ")
 			continue
 		}
-		todoRepo = executeQuery(todoRepo, query)
+		todoRepo = handle(todoRepo, query)
 		fmt.Print("Tell me what to do: ")
 	}
 	fmt.Println(todoRepo)
