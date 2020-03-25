@@ -40,15 +40,15 @@ func EditTodoText(tr TodoRepo, todoID int, updatedText string) (error, TodoRepo,
 	return nil, tr, tr[index]
 }
 
-func ToggleDone(tr TodoRepo, todoID int) (error, TodoRepo, Todo) {
+func ToggleDone(tr TodoRepo, todoID int) (TodoRepo, Todo, error) {
 	err, index := findIndex(tr, todoID)
 	if err != nil {
-		return err, tr, Todo{}
+		return tr, Todo{}, err
 	}
 
 	tr[index].done = !tr[index].done
 
-	return nil, tr, tr[index]
+	return tr, tr[index], err
 }
 
 func RemoveTodo(tr TodoRepo, todoID int) (error, TodoRepo) {

@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"strconv"
 )
 
 func executeQuery(repo TodoRepo, query Query) TodoRepo {
@@ -11,24 +10,17 @@ func executeQuery(repo TodoRepo, query Query) TodoRepo {
 		fmt.Println(repo)
 		break
 	case 2:
-		repo, _ = newTodo(repo, query.args)
+		repo, _ = newTodo(repo, query.args.text)
 		break
 	case 3:
-		query := parseInput(query.args)
-		if id, err := strconv.ParseInt(query.command, 10, 32); err == nil {
-			repo, _ = updateTodo(repo, int(id), query.args)
-			break
-		}
+		repo, _ = updateTodo(repo, query.args.todoID, query.args.text)
+		break
 	case 4:
-		if index, err := strconv.ParseInt(query.args, 10, 32); err == nil {
-			repo = toggleDone(repo, int(index))
-			break
-		}
+		repo = toggleDone(repo, query.args.todoID)
+		break
 	case 5:
-		if removeIndex, err := strconv.ParseInt(query.args, 10, 32); err == nil {
-			repo = deleteTodo(repo, int(removeIndex))
-			break
-		}
+		repo = deleteTodo(repo, query.args.todoID)
+		break
 	default:
 		fmt.Println("Sorry cant do that")
 	}
@@ -69,7 +61,7 @@ func updateTodo(repo TodoRepo, id int, updatedText string) (TodoRepo, Todo) {
 }
 
 func toggleDone(repo TodoRepo, index int) TodoRepo {
-	err, repo, _ := ToggleDone(repo, index)
+	repo, _, err := ToggleDone(repo, index)
 	if err != nil {
 		fmt.Println("Error: ", err)
 	} else {

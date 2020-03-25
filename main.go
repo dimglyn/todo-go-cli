@@ -24,7 +24,11 @@ func main() {
 			fmt.Println("Bye bye")
 			break
 		}
-		query := parseInput(text)
+		query, err := parseInput(text)
+		if err != nil {
+			fmt.Println(err)
+			continue
+		}
 		todoRepo = executeQuery(todoRepo, query)
 		fmt.Print("Tell me what to do: ")
 	}
