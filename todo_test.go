@@ -70,7 +70,7 @@ func TestToggleDone(t *testing.T) {
 			done: false,
 		},
 	}
-	_, repo, todo := ToggleDone(repo, 4)
+	repo, todo, _ := ToggleDone(repo, 4)
 
 	if !todo.done {
 		t.Error("Should be true (done)")
