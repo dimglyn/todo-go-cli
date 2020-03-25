@@ -25,7 +25,6 @@ func main() {
 			break
 		}
 		query := parseInput(text)
-		query.command = strings.ToLower(query.command)
 		todoRepo = executeQuery(todoRepo, query)
 		fmt.Print("Tell me what to do: ")
 	}
