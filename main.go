@@ -19,7 +19,7 @@ func main() {
 	fmt.Print("Tell me what to do: ")
 
 	for scanner.Scan() {
-		text := scanner.Text()
+		text := strings.TrimSpace(scanner.Text())
 		if text == "quit" || text == "exit" {
 			fmt.Println("Bye bye")
 			break
