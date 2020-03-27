@@ -4,6 +4,11 @@ import (
 	"bufio"
 	"flag"
 	"fmt"
+	"os"
+	"os/signal"
+	"syscall"
+
+	"github.com/bwmarrin/discordgo"
 )
 
 var (
@@ -19,24 +24,27 @@ func init() {
 }
 
 func main() {
+	discord, err := discordgo.New("Bot " + Token)
 
-	fmt.Println(Token)
+	if err != nil {
+		fmt.Println("error lol, ", err)
+		return
+	}
 
-	// for scanner.Scan() {
+	discord.AddHandler(messageCreate)
 
-	// 	text := strings.TrimSpace(scanner.Text())
-	// 	if text == "quit" || text == "exit" {
-	// 		fmt.Println("Bye bye")
-	// 		break
-	// 	}
-	// 	query, err := parseInput(text)
-	// 	if err != nil {
-	// 		fmt.Println(err)
-	// 		fmt.Print("Tell me what to do: ")
-	// 		continue
-	// 	}
-	// 	todoRepo = handle(todoRepo, query)
-	// 	fmt.Print("Tell me what to do: ")
-	// }
-	// fmt.Println(todoRepo)
+	err = discord.Open()
+	if err != nil {
+		fmt.Println("error opening connection,", err)
+		return
+	}
+
+	// Wait here until CTRL-C or other term signal is received.
+	fmt.Println("Bot is now running.  Press CTRL-C to exit.")
+	sc := make(chan os.Signal, 1)
+	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
+	<-sc
+
+	// Cleanly close down the Discord session.
+	discord.Close()
 }
