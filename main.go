@@ -12,15 +12,13 @@ import (
 )
 
 var (
-	Token    string
-	todoRepo TodoRepo
-	scanner  *bufio.Scanner
+	Token   string
+	scanner *bufio.Scanner
 )
 
 func init() {
 	flag.StringVar(&Token, "t", "", "Bot Token")
 	flag.Parse()
-	todoRepo = TodoRepo{}
 }
 
 func main() {

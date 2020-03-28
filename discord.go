@@ -5,6 +5,14 @@ import (
 	"fmt"
 )
 
+var todoRepo TodoRepo
+
+func init() {
+	todoRepo = TodoRepo{}
+}
+
+
+
 func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if m.Author.ID == s.State.User.ID {
 		return
@@ -17,5 +25,5 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	todoRepo = handle(todoRepo, query)
-	fmt.Println(todoRepo)
+	s.ChannelMessageSend(m.ChannelID, todoRepo.String())
 }
