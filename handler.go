@@ -4,10 +4,11 @@ import (
 	"fmt"
 )
 
-func handle(repo TodoRepo, query Query) TodoRepo {
+func handle(repo TodoRepo, query Query, dp *DiscordPayload) (TodoRepo, string) {
+	m := ""
 	switch query.command {
 	case 1:
-		fmt.Println(repo)
+		dp.respond("\n" + repo.String())
 		break
 	case 2:
 		repo, _ = newTodo(repo, query.args.text)
@@ -25,7 +26,7 @@ func handle(repo TodoRepo, query Query) TodoRepo {
 		fmt.Println("Sorry cant do that")
 	}
 
-	return repo
+	return repo, m
 }
 
 func newTodo(repo TodoRepo, args string) (TodoRepo, int) {

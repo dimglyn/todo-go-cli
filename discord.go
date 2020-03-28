@@ -11,10 +11,17 @@ func init() {
 	todoRepo = TodoRepo{}
 }
 
-
+type DiscordPayload struct { 
+		session *discordgo.Session
+		message *discordgo.MessageCreate
+}
 
 func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if m.Author.ID == s.State.User.ID {
+		return
+	}
+	if m.Content == "quit" || m.Content == "exit" {
+		fmt.Println("Bye bye")
 		return
 	}
 
@@ -24,6 +31,14 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		fmt.Print("Tell me what to do: ")
 	}
 
-	todoRepo = handle(todoRepo, query)
-	s.ChannelMessageSend(m.ChannelID, todoRepo.String())
+	todoRepo, _ = handle(todoRepo, query, &DiscordPayload{
+		session: s,
+		message: m,
+	})
+}
+
+
+func (dp *DiscordPayload) respond(res string) {
+	fmt.Println(res)
+	dp.session.ChannelMessageSend(dp.message.ChannelID, res)
 }
