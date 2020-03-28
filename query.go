@@ -82,7 +82,7 @@ func getCommand(command string) Command {
 }
 
 func validQuery(q string) (bool, error) {
-	queryRegex := `(?m)(show|view|add|new|create|edit|update|toggle|done|remove|delete|rm)\s?(\d*)( .*)?`
+	queryRegex := `((?m)(show|view)$|(?m)(add|new|create)\s(.*)$|(?m)(edit|update)\s(\d*)\s(.*)$|(?m)(toggle|done|remove|delete|rm)\s(\d*)$)`
 	return regexp.MatchString(queryRegex, q)
 }
 
